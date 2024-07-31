@@ -57,7 +57,7 @@ class ChatBot():
     from langchain import PromptTemplate
 
     template = """
-    You are a fortune teller. These Human will ask you a questions about their life. 
+    You are a question answer agents. These Human will ask you a question 
     Use following piece of context to answer the question. 
     If you don't know the answer, just say you don't know. 
     Keep the answer within 2 sentences and concise.
