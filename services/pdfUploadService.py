@@ -3,6 +3,8 @@ import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
 from langchain_openai import AzureChatOpenAI
 from PyPDF2 import PdfReader # type: ignore
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Initialize the Azure OpenAI model
 def initialize_llm():
@@ -24,11 +26,20 @@ def summarize_pdf(file, llm):
     for page in pdf.pages:
         text += page.extract_text()
 
+    text_splitter = RecursiveCharacterTextSplitter(
+    # Set a really small chunk size, just to show.
+    chunk_size=5000,
+    chunk_overlap=500,
+    length_function=len,
+    is_separator_regex=False,
+    )
+    
+    texts = text_splitter.create_documents(text)
     # Load summarization chain
-    chain = load_summarize_chain(llm)
+    chain = load_summarize_chain(llm,chain_type="map_reduce")
     
     # Get the summary
-    summary = chain.run(text)
+    summary = chain.run(texts)
     return summary
 
 # PDF Upload Service
