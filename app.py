@@ -1,6 +1,20 @@
 import streamlit as st
 from services.pdfUploadService import upload_pdf_service
 from services.queryService import process_user_query
+from services.onePageSummary import one_page_summary_service
+
+# Handler to process user query and update conversation history
+def process_query():
+    user_input = st.session_state.user_input
+    if user_input:
+        # Process the user query and get the response
+        response = process_user_query(user_input)
+        
+        # Update the conversation history
+        st.session_state.conversation_history.append({"query": user_input, "response": response})
+        
+        # Clear the input box by setting user_input to an empty string
+        st.session_state.user_input = ""
 
 # Main Application
 def main():
@@ -11,19 +25,8 @@ def main():
     if 'conversation_history' not in st.session_state:
         st.session_state.conversation_history = []
 
-    # Input box for user prompts
-    user_input = st.text_input("Enter your query:", key="user_input")
-
-    if st.button("Submit"):
-        if user_input:
-            # Process the user query and get the response
-            response = process_user_query(user_input)
-            
-            # Update the conversation history
-            st.session_state.conversation_history.append({"query": user_input, "response": response})
-
-            # Clear the input box
-            st.session_state.user_input = ""  # Note: Using this to clear the input box
+    # Input box for user prompts with an on_change handler
+    st.text_input("Enter your query:", key="user_input", on_change=process_query)
 
     # Display the conversation history
     if st.session_state.conversation_history:
