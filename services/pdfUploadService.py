@@ -10,6 +10,7 @@ from langchain import PromptTemplate
 from services.databaseRetrieval import get_index_name_by_policy_name,get_summary_by_index_name
 from services.customSummarisation import summarize_insurance_document
 # Initialize the Azure OpenAI model
+
 def initialize_llm():
     model = AzureChatOpenAI(
         openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
