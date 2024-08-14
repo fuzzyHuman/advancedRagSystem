@@ -1,10 +1,9 @@
 langchain
-pinecone-client
-pinecone
+pinecone-client[grpc]
 python-dotenv
 streamlit
-langchain-openai
-langchain-community
 PyPDF2
 pymongo
-google-api-python-client
+langchain-community
+langchain-openai
+sentence-transformers

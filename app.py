@@ -1,7 +1,7 @@
 import streamlit as st
 from services.pdfUploadService import upload_pdf_service
 from services.queryService import process_user_query
-from services.onePageSummary import one_page_summary_service
+# from services.onePageSummary import 
 
 # Handler to process user query and update conversation history
 def process_query():
