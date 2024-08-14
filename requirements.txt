@@ -2,5 +2,7 @@ langchain
 pinecone-client
 python-dotenv
 streamlit
-langchain_openai
-langchain_community
+langchain-openai
+langchain-community
+PyPDF2
+pymongo
