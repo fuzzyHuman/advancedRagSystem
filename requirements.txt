@@ -7,3 +7,4 @@ langchain-openai
 langchain-community
 PyPDF2
 pymongo
+google-api-python-client
