@@ -1,6 +1,8 @@
 from langchain_openai import AzureChatOpenAI
 import os
-from services.databaseRetrieval import get_all_summaries_with_index_names
+from services.databaseRetrieval import get_all_summaries_with_index_names,get_policy_name_by_index_name
+import streamlit as st
+import dotenv
 
 def initialize_llm():
     model = AzureChatOpenAI(
@@ -50,7 +52,7 @@ def score_policy_explanation_with_llm(explanation, summaries_with_index_names):
         
         # Extract the score from the response
         try:
-            score_line = response.strip().split('\n')[0]  # Assuming score is in the first line
+            score_line = str(response.content).strip().split('\n')[0]  # Assuming score is in the first line
             score = float(score_line.split()[-1])
         except Exception as e:
             print(f"Failed to parse score: {e}")
@@ -71,3 +73,22 @@ def find_best_policy(explanation):
     best_policy_name = score_policy_explanation_with_llm(explanation, summaries_with_index_names)
     
     return best_policy_name
+
+def display_insurance_comparison_app():
+    dotenv.load_dotenv()
+    # st.title("Insurance Policy Comparison App")
+
+    # Use the sidebar for the insurance comparison tool
+    with st.sidebar:
+        st.header("Please input what kind of insurance policy are you looking for?")
+        # Display the text box in the sidebar
+        user_input = st.text_area("Describe your desired insurance policy", height=200)
+
+        if st.button("Find Best Policy"):
+            if user_input:
+                # Process the user input and find the best matching policy
+                best_policy = find_best_policy(user_input)
+                name_of_best_policy = get_policy_name_by_index_name(best_policy)
+                st.success(f"The best matching policy is: {name_of_best_policy}")
+            else:
+                st.warning("Please enter a description of your desired insurance policy.")

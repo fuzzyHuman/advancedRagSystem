@@ -13,7 +13,7 @@ def summarize_first_page(uploaded_file, llm):
     second_page = pdf.pages[1]
     
     text_first_page = first_page.extract_text()
-    text_second_page = first_page.extract_text()
+    text_second_page = second_page.extract_text()
     doc1 = Document(page_content=text_first_page)
     doc2 = Document(page_content=text_second_page)
     

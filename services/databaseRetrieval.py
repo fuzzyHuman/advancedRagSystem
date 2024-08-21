@@ -116,3 +116,12 @@ def get_all_summaries_with_index_names():
         summaries_with_index_names.append({"index_name": index_name, "summary": summary})
     
     return summaries_with_index_names
+
+def get_policy_name_by_index_name(index_name):
+    # Find the document with the given index name
+    document = collection.find_one({"index_name": index_name}, {"_id": 0, "Name of Policy": 1})
+    
+    if document:
+        return document.get("Name of Policy")
+    else:
+        return None

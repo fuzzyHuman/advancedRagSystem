@@ -1,6 +1,7 @@
 import streamlit as st
 from services.pdfUploadService import upload_pdf_service
 from services.queryService import process_user_query
+from services.comparatorServices.findBestPolicy import display_insurance_comparison_app
 # from services.compareInsurance import compare_policies_service
 # from services.onePageSummary import 
 
@@ -39,6 +40,7 @@ def main():
     # Call the PDF upload service in the sidebar
     upload_pdf_service()
     # compare_policies_service()
+    display_insurance_comparison_app()
 
 if __name__ == "__main__":
     main()
