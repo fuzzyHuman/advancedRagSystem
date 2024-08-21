@@ -103,3 +103,16 @@ def get_all_index_names():
     # Retrieve all unique index names from the paramSummary collection
     index_names = collection.distinct("index_name")
     return index_names
+
+def get_all_summaries_with_index_names():
+    # Retrieve all documents with their index names and summaries
+    documents = collection.find({}, {"_id": 0, "index_name": 1, "Quick Insurance summary": 1})
+    
+    summaries_with_index_names = []
+    
+    for doc in documents:
+        index_name = doc.get("index_name")
+        summary = doc.get("Quick Insurance summary", "")
+        summaries_with_index_names.append({"index_name": index_name, "summary": summary})
+    
+    return summaries_with_index_names

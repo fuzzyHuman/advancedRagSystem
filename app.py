@@ -1,7 +1,7 @@
 import streamlit as st
 from services.pdfUploadService import upload_pdf_service
 from services.queryService import process_user_query
-from services.compareInsurance import compare_policies_service
+# from services.compareInsurance import compare_policies_service
 # from services.onePageSummary import 
 
 # Handler to process user query and update conversation history
@@ -38,7 +38,7 @@ def main():
 
     # Call the PDF upload service in the sidebar
     upload_pdf_service()
-    compare_policies_service()
+    # compare_policies_service()
 
 if __name__ == "__main__":
     main()
