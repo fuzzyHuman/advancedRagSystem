@@ -3,6 +3,50 @@ import os
 from services.databaseRetrieval import get_all_summaries_with_index_names,get_policy_name_by_index_name
 import streamlit as st
 import dotenv
+import requests
+
+def initialize_llama_model():
+    """
+    Initialize LLaMA model with GCP endpoint and authorization headers.
+    Parameters:
+        - None
+    Returns:
+        - tuple: A tuple containing the API URL (str) and headers (dict).
+    Example:
+        - initialize_llama_model() -> ("https://example-endpoint/v1beta1/projects/project-id/locations/region/endpoints/openapi/chat/completions", {"Authorization": "Bearer access_token", "Content-Type": "application/json"})
+    """
+    endpoint = os.getenv("GCP_AI_ENDPOINT")
+    region = os.getenv("GCP_REGION")
+    project_id = os.getenv("GCP_PROJECT_ID")
+    
+    api_url = f"https://{endpoint}/v1beta1/projects/{project_id}/locations/{region}/endpoints/openapi/chat/completions"
+    access_token = os.popen('AIzaSyBGF3007pngZ4KS1-YbuDGUl6tHAn0DpfI').read().strip()
+
+    headers = {
+        "Authorization": f"Bearer AIzaSyBGF3007pngZ4KS1-YbuDGUl6tHAn0DpfI",
+        "Content-Type": "application/json"
+    }
+
+    return api_url, headers
+
+def llama_chat_completion(api_url, headers, prompt):
+    payload = {
+        "model": "meta/llama3-405b-instruct-maas",
+        "stream": True,  # Adjust based on your needs
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    response = requests.post(api_url, headers=headers, json=payload)
+    response.raise_for_status()
+    
+    return response.json()  # Or process the streamed response accordingly
+
+def getLlamaResponse(prompt):
+    api_url,headers = initialize_llama_model()
+    return llama_chat_completion(api_url,headers,prompt)
+
 
 def initialize_llm():
     model = AzureChatOpenAI(
@@ -49,6 +93,8 @@ def score_policy_explanation_with_llm(explanation, summaries_with_index_names):
 
         # Get the response from the LLM
         response = llm(prompt)
+        llamaResponse = getLlamaResponse(prompt)
+        print(llamaResponse)
         
         # Extract the score from the response
         try:
